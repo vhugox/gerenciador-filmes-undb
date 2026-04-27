@@ -33,7 +33,7 @@ export default async function FilmeDetalhes(props: { params: Promise<{ id: strin
         </div>
         
         <div className="flex flex-col md:flex-row">
-          {filme.Poster !== 'N/A' && (
+          {filme.poster !== 'N/A' && (
             <div className="w-full md:w-1/3 bg-slate-100 dark:bg-slate-800">
               <img src={filme.Poster} alt={filme.Title} className="w-full h-full object-cover" />
             </div>
