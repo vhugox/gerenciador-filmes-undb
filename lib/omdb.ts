@@ -16,17 +16,14 @@ export async function buscarDetalhesFilme(id: string) {
     const atores = dados.credits?.cast?.slice(0, 3).map((a: any) => a.name).join(', ') || 'N/A';
 
     return {
-      id: dados.id.toString(),
-      Title: dados.title,
-      Year: dados.release_date ? dados.release_date.split('-')[0] : 'N/A',
-      Poster: dados.poster_path ? `https://image.tmdb.org/t/p/w500${dados.poster_path}` : 'N/A',
-      Genre: dados.genres?.map((g: any) => g.name).join(', ') || 'N/A',
-      Plot: dados.overview || 'Sinopse não disponível em português.',
-      Director: diretor,
-      Actors: atores,
-      Runtime: `${dados.runtime} min`,
-      imdbRating: dados.vote_average?.toFixed(1) || 'N/A',
-      Response: 'True'
+      id: detalhes.id || '',
+      title: detalhes.Title || 'Sem título',
+      year: detalhes.Year || 'N/A',
+      poster: detalhes.Poster || 'N/A', // O "|| 'N/A'" garante que sempre será uma string
+      genre: detalhes.Genre || 'N/A',
+      plot: detalhes.Plot || 'Sem sinopse',
+      status: 'pendente',
+      savedAt: new Date().toISOString(),
     };
   } catch (erro) {
     console.error("Erro ao buscar detalhes:", erro);
