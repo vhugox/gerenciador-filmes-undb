@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(cuid())
+  email    String  @unique
+  password String
+  name     String?
+  filmes   Filme[] // Relação 1 para N (Um usuário tem vários filmes)
+}
+
+model Filme {
+  id        String   @id @default(cuid())
+  imdbId    String
+  title     String
+  year      String
+  poster    String
+  genre     String
+  plot      String
+  status    String   // 'assistido' ou 'pendente'
+  rating    Int?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([imdbId, userId]) // Garante que o usuário não salve o mesmo filme duas vezes
+}
