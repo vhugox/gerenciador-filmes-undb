@@ -35,11 +35,7 @@ export default async function FilmeDetalhes(props: { params: Promise<{ id: strin
         <div className="flex flex-col md:flex-row">
          {filme.poster !== 'N/A' && (
   <div className="w-full md:w-1/3 bg-slate-100 dark:bg-slate-800">
-    <img 
-      src={filme.poster} 
-      alt={filme.title} 
-      className="w-full h-full object-cover" 
-    />
+   <img src={film.poster} alt={film.title} className="w-full h-full object-cover" />
   </div>
 )}
           
