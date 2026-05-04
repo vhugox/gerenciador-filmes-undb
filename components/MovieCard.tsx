@@ -17,6 +17,9 @@ interface MovieCardProps {
 export function MovieCard({ filme, onToggleStatus, onRemove, onRate }: MovieCardProps) {
   const isAssistido = filme.status === 'assistido';
 
+  // O PULO DO GATO: Direciona para a página certa independente de onde o filme veio
+  const linkParaDetalhes = filme.imdbId ? `/filmes/${filme.imdbId}` : `/filmes/${filme.id}`;
+
   return (
     <Card className="flex flex-col h-full overflow-hidden border-slate-200 dark:border-slate-800 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 group bg-white dark:bg-slate-900">
       <div className="h-72 overflow-hidden relative">
@@ -37,8 +40,8 @@ export function MovieCard({ filme, onToggleStatus, onRemove, onRate }: MovieCard
       
       <CardHeader className="p-5 flex-grow">
         <CardTitle className="text-xl font-bold line-clamp-2 mb-2 group-hover:text-indigo-600 transition-colors">
-          {/* Aqui está o Link que leva para a página de detalhes */}
-          <Link href={`/filmes/${filme.id}`} className="hover:underline">
+          {/* Link corrigido aqui! */}
+          <Link href={linkParaDetalhes} className="hover:underline">
             {filme.title}
           </Link>
         </CardTitle>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { buscarFilme, buscarSugestoes } from '../lib/omdb';
 import { Filme } from '../lib/types';
 import { Input } from './ui/input';
@@ -17,8 +17,14 @@ export function SearchBar({ onResult }: SearchBarProps) {
   const [sugestoes, setSugestoes] = useState<any[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   
+  // SINALIZADOR: Avisa se a mudança de texto foi por clique ou digitação
+  const isSelecting = useRef(false);
+  
   // Efeito que roda automaticamente enquanto você digita
   useEffect(() => {
+    // Se a mudança de texto veio do clique na lista, ignoramos a busca e paramos aqui!
+    if (isSelecting.current) return;
+
     const timer = setTimeout(async () => {
       // Só busca se tiver digitado pelo menos 3 letras
       if (query.trim().length >= 3) {
@@ -38,7 +44,11 @@ export function SearchBar({ onResult }: SearchBarProps) {
   const handleSearch = async (tituloParaBuscar: string) => {
     if (!tituloParaBuscar.trim()) return;
 
+    // Levanta a bandeira: "Estou selecionando da lista, não abra as sugestões!"
+    isSelecting.current = true;
+    
     setShowDropdown(false);
+    setSugestoes([]); // Limpa as sugestões por segurança
     setLoading(true);
     setQuery(tituloParaBuscar); // Preenche a barra com o nome escolhido
     
@@ -61,7 +71,11 @@ export function SearchBar({ onResult }: SearchBarProps) {
             type="text"
             placeholder="Digite o nome de um filme (ex: Batman, Avatar)..."
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => {
+              // Abaixa a bandeira: "O usuário está digitando manualmente, pode buscar!"
+              isSelecting.current = false;
+              setQuery(e.target.value);
+            }}
             className="w-full pl-11 h-14 text-lg rounded-xl border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 focus-visible:ring-indigo-500 shadow-sm"
           />
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
